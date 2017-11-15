@@ -2,9 +2,11 @@
 
 大阪電気通信大学  
 升谷 保博  
-2017年3月29日
+2017年11月15日
 
 ## はじめに
+
+- （2017年11月15日）名前を`RTCPCLKinect`から`KinectToPC`（Kinect to PointCloud）に変更しました．
 
 - Microsoft Kinectから深度と色の情報を読み取り，RTC:PCLのPointCloud型（`PointCloudTypes::PointCoud`）を
 出力するRTコンポーネントです．
@@ -36,12 +38,12 @@
 - row_step: 10240
 - is_dense: 0
 - fields (name,offset,data_type,count)
-  - [0]: "x",0,6,4
-  - [1]: "y",4,6,4
-  - [2]: "z",8,6,4
-  - [3]: "b",12,1,1
-  - [4]: "g",13,1,1
-  - [5]: "r",14,1,1
+  - 0: "x",0,6,4
+  - 1: "y",4,6,4
+  - 2: "z",8,6,4
+  - 3: "b",12,1,1
+  - 4: "g",13,1,1
+  - 5: "r",14,1,1
 
 ## インストール
 
@@ -50,12 +52,12 @@
 をインストール（2017年3月下旬に削除されたようです）．
 - [Kinect for Windows SDK v1.8](https://www.microsoft.com/en-us/download/details.aspx?id=40278)
 をインストール．
-- [RTCPCLKinect](https://github.com/MasutaniLab/RTCPCLKinect)
+- [KinectToPC](https://github.com/MasutaniLab/KinectToPC)
 をクローンかダウンロードする．
 - CMake
   - ビルドディレクトリはトップ直下の`build`
   - ConfigureはVisual Studio 64bit
-- `build\RTCPCLKinect.sln`をVisual Studioで開く．
+- `build\KinectToPC.sln`をVisual Studioで開く．
 - パフォーマンスを出すために，Releaseでビルドがお勧め．
 
 ## 使い方
@@ -65,7 +67,7 @@
 rtc.confに`corba.args: -ORBgiopMaxMsgSize`の設定が必要です．
 トップディレクトリのrtc.confでは`corba.args: -ORBgiopMaxMsgSize 20971520`
 にしています（デフォルト値の10倍）．
-- コンポーネントを起動するバッチファイル`RTCPCLKinectComp.bat`を用意しています．
+- コンポーネントを起動するバッチファイル`KinectToPC.bat`を用意しています．
   - ビルドディレクトリがトップ直下の`build`であることを仮定しています．
   - 環境変数`RTM_VC_CONFIG`を`Debug`か`Release`に設定してください．
 - 動作確認のための接続相手として，
