@@ -40,7 +40,7 @@ static const char* kinecttopc_spec[] =
 KinectToPC::KinectToPC(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
-    m_outOut("out", m_out)
+    m_pcOut("pc", m_pc)
 
     // </rtc-template>
 {
@@ -63,7 +63,7 @@ RTC::ReturnCode_t KinectToPC::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  addOutPort("out", m_outOut);
+  addOutPort("pc", m_pcOut);
   
   // Set service provider to Ports
   
@@ -106,35 +106,35 @@ RTC::ReturnCode_t KinectToPC::onActivated(RTC::UniqueId ec_id)
   cout << "KinectToPC::onActivated()" << endl;
   try {
     m_interface = boost::make_shared<pcl::KinectGrabber>();
-    m_out.type = "xyzrgb";
-    m_out.fields.length(6);
-    m_out.fields[0].name = "x";
-    m_out.fields[0].offset = 0;
-    m_out.fields[0].data_type = PointCloudTypes::FLOAT32;
-    m_out.fields[0].count = 4;
-    m_out.fields[1].name = "y";
-    m_out.fields[1].offset = 4;
-    m_out.fields[1].data_type = PointCloudTypes::FLOAT32;
-    m_out.fields[1].count = 4;
-    m_out.fields[2].name = "z";
-    m_out.fields[2].offset = 8;
-    m_out.fields[2].data_type = PointCloudTypes::FLOAT32;
-    m_out.fields[2].count = 4;
-    m_out.fields[3].name = "b";
-    m_out.fields[3].offset = 12;
-    m_out.fields[3].data_type = PointCloudTypes::UINT8;
-    m_out.fields[3].count = 1;
-    m_out.fields[4].name = "g";
-    m_out.fields[4].offset = 13;
-    m_out.fields[4].data_type = PointCloudTypes::UINT8;
-    m_out.fields[4].count = 1;
-    m_out.fields[5].name = "r";
-    m_out.fields[5].offset = 14;
-    m_out.fields[5].data_type = PointCloudTypes::UINT8;
-    m_out.fields[5].count = 1;
-    m_out.is_bigendian = false;
-    m_out.point_step = 16;
-    m_out.is_dense = false;
+    m_pc.type = "xyzrgb";
+    m_pc.fields.length(6);
+    m_pc.fields[0].name = "x";
+    m_pc.fields[0].offset = 0;
+    m_pc.fields[0].data_type = PointCloudTypes::FLOAT32;
+    m_pc.fields[0].count = 4;
+    m_pc.fields[1].name = "y";
+    m_pc.fields[1].offset = 4;
+    m_pc.fields[1].data_type = PointCloudTypes::FLOAT32;
+    m_pc.fields[1].count = 4;
+    m_pc.fields[2].name = "z";
+    m_pc.fields[2].offset = 8;
+    m_pc.fields[2].data_type = PointCloudTypes::FLOAT32;
+    m_pc.fields[2].count = 4;
+    m_pc.fields[3].name = "b";
+    m_pc.fields[3].offset = 12;
+    m_pc.fields[3].data_type = PointCloudTypes::UINT8;
+    m_pc.fields[3].count = 1;
+    m_pc.fields[4].name = "g";
+    m_pc.fields[4].offset = 13;
+    m_pc.fields[4].data_type = PointCloudTypes::UINT8;
+    m_pc.fields[4].count = 1;
+    m_pc.fields[5].name = "r";
+    m_pc.fields[5].offset = 14;
+    m_pc.fields[5].data_type = PointCloudTypes::UINT8;
+    m_pc.fields[5].count = 1;
+    m_pc.is_bigendian = false;
+    m_pc.point_step = 16;
+    m_pc.is_dense = false;
     boost::function<void (const pcl::PointCloud<PointT>::ConstPtr&)> f = boost::bind(&KinectToPC::cloud_cb, this, _1);
     m_interface->registerCallback(f);
     m_interface->start();
@@ -201,13 +201,13 @@ RTC::ReturnCode_t KinectToPC::onRateChanged(RTC::UniqueId ec_id)
 
 void KinectToPC::cloud_cb(const pcl::PointCloud<PointT>::ConstPtr &cloud)
 {
-  setTimestamp(m_out);
-  m_out.width = cloud->width;
-  m_out.height = cloud->height;
-  m_out.row_step = m_out.point_step*m_out.width;
-  m_out.data.length(m_out.height*m_out.row_step);
+  setTimestamp(m_pc);
+  m_pc.width = cloud->width;
+  m_pc.height = cloud->height;
+  m_pc.row_step = m_pc.point_step*m_pc.width;
+  m_pc.data.length(m_pc.height*m_pc.row_step);
 
-  float *dst_cloud = (float *)m_out.data.get_buffer();
+  float *dst_cloud = (float *)m_pc.data.get_buffer();
   for (unsigned int i=0; i<cloud->points.size(); i++){
     dst_cloud[0] = -cloud->points[i].x;
     dst_cloud[1] =  cloud->points[i].y;
@@ -215,7 +215,7 @@ void KinectToPC::cloud_cb(const pcl::PointCloud<PointT>::ConstPtr &cloud)
     dst_cloud[3] =  cloud->points[i].rgb;
     dst_cloud += 4;
   }
-  m_outOut.write();
+  m_pcOut.write();
 
   static int count = 0;
   static double last = 0;

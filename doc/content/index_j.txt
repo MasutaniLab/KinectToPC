@@ -108,7 +108,7 @@ KinectToPCは ``KinectToPCComp`` を実行（ ``${prefix}/components/bin`` に
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-out             OutPort     PointCloudTypes::PointCloud    
+pc              OutPort     PointCloudTypes::PointCloud    
 =============== =========== ============================== ====
 
 例

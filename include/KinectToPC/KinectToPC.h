@@ -252,10 +252,10 @@ class KinectToPC
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  PointCloudTypes::PointCloud m_out;
+  PointCloudTypes::PointCloud m_pc;
   /*!
    */
-  OutPort<PointCloudTypes::PointCloud> m_outOut;
+  OutPort<PointCloudTypes::PointCloud> m_pcOut;
   
   // </rtc-template>
 

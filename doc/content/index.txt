@@ -116,7 +116,7 @@ The ports provided by the component are described below:
 =============== =========== ============================== =======
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
-out             OutPort     PointCloudTypes::PointCloud    
+pc              OutPort     PointCloudTypes::PointCloud    
 =============== =========== ============================== =======
 
 Examples
